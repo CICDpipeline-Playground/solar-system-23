@@ -19,14 +19,18 @@ pipeline{
 
         stage ("Dependency Scanning"){
             parallel {
-                steps{
-                    sh '''
-                        npm audit --audit-level=critical
-                    '''
+                stage ("NPM dep checking") {
+                    steps{
+                        sh '''
+                            npm audit --audit-level=critical
+                            echo $?
+                        '''
+                    }
                 }
-
-                steps{
-                    sh 'echo $?'
+                stage ("dummy stage"){
+                    steps{
+                        sh 'echo $?'
+                    }
                 }
             }
         }
