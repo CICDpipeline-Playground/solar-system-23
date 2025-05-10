@@ -38,8 +38,7 @@ pipeline{
 
                         junit allowEmptyResults: true, skipOldReports: true, stdioRetention: '', testResults: 'dependency-check-junit.xml'
 
-                        publishHTML([allowMissing: true, alwaysLinkToLastBuild: false, includes: '**/*.html', keepAll: false, reportDir: 'dependency-check-report.html', reportFiles: 'index.html', reportName: 'dependency-check HTML Report', reportTitles: '', useWrapperFileDirectly: true])
-
+                        publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'dependency-check-report.html', reportFiles: 'index.html', reportName: 'Dependency check HTML Report', reportTitles: '', useWrapperFileDirectly: true])
 
 
                     }
