@@ -3,7 +3,7 @@ pipeline{
 
     stages{
         stage("Checking node version in jenkins") {
-            step{
+            steps{
                 sh '''
                     node -v
                     npm -v
