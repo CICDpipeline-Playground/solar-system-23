@@ -31,7 +31,7 @@ pipeline{
                     steps{
                         dependencyCheck additionalArguments: '''--scan \\\'./\\\'
                             --out \\\'./\\\'
-                            --format \\\'XML\\\'
+                            --format \\\'ALL\\\'
                             --prettyprint''', odcInstallation: 'owasp-12.1.1'
                     }
                 }
