@@ -33,6 +33,15 @@ pipeline{
                             --out \'./\'
                             --format \'ALL\'
                             --prettyPrint''', odcInstallation: 'owasp-12.1.1'
+                        
+                        dependencyCheckPublisher failedTotalCritical: 1, pattern: 'dependency-check-report.xml', stopBuild: true
+
+                        junit allowEmptyResults: true, skipOldReports: true, stdioRetention: '', testResults: 'dependency-check-junit.xml'
+
+                        publishHTML([allowMissing: true, alwaysLinkToLastBuild: false, includes: '**/*.html', keepAll: false, reportDir: 'dependency-check-report.html', reportFiles: 'index.html', reportName: 'dependency-check HTML Report', reportTitles: '', useWrapperFileDirectly: true])
+
+
+
                     }
                 }
             }
