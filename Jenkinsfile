@@ -19,7 +19,7 @@ pipeline{
 
         stage ("Dependency Scanning"){
             parallel {
-                stage ("NPM dep checking") {
+                stage ("NPM DEP CHECKING") {
                     steps{
                         sh '''
                             npm audit --audit-level=critical
@@ -27,9 +27,12 @@ pipeline{
                         '''
                     }
                 }
-                stage ("dummy stage"){
+                stage ("OWASP DEP CHECKING"){
                     steps{
-                        sh 'echo $?'
+                        dependencyCheck additionalArguments: '''--scan \\\'./\\\'
+                            --out \\\'./\\\'
+                            --format \\\'XML\\\'
+                            --prettyprint''', odcInstallation: 'owasp-12.1.1'
                     }
                 }
             }
