@@ -45,5 +45,11 @@ pipeline{
                 }
             }
         }
+
+        stage ("Executing unit tests"){
+            steps{
+                sh 'npm test'
+            }
+        }
     }
 }
