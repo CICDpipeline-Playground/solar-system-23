@@ -1,14 +1,14 @@
-            pipeline{
-                agent any
+pipeline{
+    agent any
 
-                stages{
-                    stage("Checking node version in jenkins") {
-                        step{}
-                            sh '''
-                                node -v
-                                npm -v
-                            '''
-                    }
-                    }
-                }
-            }
+    stages{
+        stage("Checking node version in jenkins") {
+            step{
+                sh '''
+                    node -v
+                    npm -v
+                '''
+        }
+        }
+    }
+}
