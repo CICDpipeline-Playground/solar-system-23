@@ -14,9 +14,21 @@ pipeline{
                     npm -v
                     npm install --no-audit
                 '''
-
-
         }
+        }
+
+        stage ("Dependency Scanning"){
+            parallel {
+                steps{
+                    sh '''
+                        npm audit --audit-level=critical
+                    '''
+                }
+
+                steps{
+                    sh 'echo $?'
+                }
+            }
         }
     }
 }
