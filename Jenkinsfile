@@ -5,6 +5,10 @@ pipeline{
         nodejs 'Nodejs-gb-23.8.0'
     }
 
+    environment {
+        MONGO_URI = "mongodb+srv://supercluster.d83jj.mongodb.net/superData"
+    }
+
 
     stages{
         stage("Checking node version in jenkins and installing dependencies") {
@@ -38,8 +42,7 @@ pipeline{
 
                         junit allowEmptyResults: true, skipOldReports: true, stdioRetention: '', testResults: 'dependency-check-junit.xml'
 
-                        publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: './dependency-check-report.html', reportFiles: 'index.html', reportName: 'Dependency check HTML Report', reportTitles: '', useWrapperFileDirectly: true])
-
+                        publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: './', reportFiles: 'dependency-check-report.html', reportName: 'Dependency Check HTML Report', reportTitles: '', useWrapperFileDirectly: true])
 
                     }
                 }
@@ -48,7 +51,10 @@ pipeline{
 
         stage ("Executing unit tests"){
             steps{
-                sh 'npm test'
+                withCredentials([usernamePassword(credentialsId: 'mongo-db-gb-creds', passwordVariable: 'MONGO_PASSWORD', usernameVariable: 'MONGO_USERNAME')]) {  
+                     sh 'npm test'
+            }
+                junit allowEmptyResults: true, skipOldReports: true, stdioRetention: '', testResults: 'test-results.xml'     
             }
         }
     }
