@@ -32,7 +32,7 @@ pipeline{
                         dependencyCheck additionalArguments: '''--scan \'./\'
                             --out \'./\'
                             --format \'ALL\'
-                            --prettyprint''', odcInstallation: 'owasp-12.1.1'
+                            --prettyPrint''', odcInstallation: 'owasp-12.1.1'
                     }
                 }
             }
