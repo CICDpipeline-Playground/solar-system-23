@@ -12,7 +12,7 @@ pipeline{
                 sh '''
                     node -v
                     npm -v
-                    npm insall --no-audit
+                    npm install --no-audit
                 '''
 
 
