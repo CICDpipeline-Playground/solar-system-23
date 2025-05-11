@@ -57,5 +57,11 @@ pipeline{
                 junit allowEmptyResults: true, skipOldReports: true, stdioRetention: '', testResults: 'test-results.xml'     
             }
         }
+
+        stage ("Code Coverage"){
+            steps {
+                sh 'npm run coverage'
+            }
+        }
     }
 }
