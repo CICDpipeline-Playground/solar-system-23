@@ -7,6 +7,10 @@ pipeline{
 
     environment {
         MONGO_URI = "mongodb+srv://supercluster.d83jj.mongodb.net/superData"
+        //https://www.jenkins.io/doc/book/pipeline/jenkinsfile/#for-secret-text-usernames-and-passwords-and-secret-files
+        MONGO_DB_CREDS = credentials('mongo-db-gb')
+        MONGO_USERNAME = credentials('mdb-gb-uname')
+        MONGO_PASSWORD = credentials('mdb-gb-pwd')
     }
 
 
@@ -40,10 +44,6 @@ pipeline{
                         
                         dependencyCheckPublisher failedTotalCritical: 1, pattern: 'dependency-check-report.xml', stopBuild: true
 
-                        junit allowEmptyResults: true, skipOldReports: true, stdioRetention: '', testResults: 'dependency-check-junit.xml'
-
-                        publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: './', reportFiles: 'dependency-check-report.html', reportName: 'Dependency Check HTML Report', reportTitles: '', useWrapperFileDirectly: true])
-
                     }
                 }
             }
@@ -52,22 +52,36 @@ pipeline{
         stage ("Executing unit tests"){
             steps{
                 catchError(buildResult: 'SUCCESS', message: 'Unknown error. This will be fixed in the next release.', stageResult: 'UNSTABLE') {
-                    withCredentials([usernamePassword(credentialsId: 'mongo-db-gb', passwordVariable: 'MONGO_PASSWORD', usernameVariable: 'MONGO_USERNAME')]) {  
-                        sh 'npm test'
+                    
+                    sh '''
+                        echo colon-separated - $MONGO_DB_CREDS
+                        echo Mongo-Uname - $MONGO_USERNAME
+                        echo Mongo-Pwd - $MONGO_PASSWORD
+                    '''
+                    
+                    sh 'npm test'
+            
+                    
                 }
-                    junit allowEmptyResults: true, skipOldReports: true, stdioRetention: '', testResults: 'test-results.xml'     
-                    }
             }
         }
 
         stage ("Code Coverage"){
             steps {
                 catchError(buildResult: 'SUCCESS', message: 'Shhh! This can be fixed in the next release.', stageResult: 'UNSTABLE') {
-
-                sh 'npm run coverage'
-                publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: './coverage/lcov-report/', reportFiles: 'index.html', reportName: 'Code Coverage Report.html', reportTitles: '', useWrapperFileDirectly: true])
+                    sh 'npm run coverage'
+                    
                 }
             }
         }
     }
+    post {
+        always {
+            junit allowEmptyResults: true, skipOldReports: true, stdioRetention: '', testResults: 'dependency-check-junit.xml'
+            publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: './', reportFiles: 'dependency-check-report.html', reportName: 'Dependency Check HTML Report', reportTitles: '', useWrapperFileDirectly: true])
+            junit allowEmptyResults: true, skipOldReports: true, stdioRetention: '', testResults: 'test-results.xml'     
+            publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'coverage/lcov-report/', reportFiles: 'index.html', reportName: 'Code Coverage Report.html', reportTitles: '', useWrapperFileDirectly: true])
+        }
+    }
+
 }
