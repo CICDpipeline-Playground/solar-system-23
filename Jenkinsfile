@@ -35,7 +35,7 @@ pipeline{
                     steps{
                         dependencyCheck additionalArguments: '''--scan \'./\'
                             --out \'./\'
-                            --format \'ALL\'
+                            --format \'XML\'
                             --prettyPrint''', odcInstallation: 'owasp-12.1.1'
                         
                         dependencyCheckPublisher failedTotalCritical: 1, pattern: 'dependency-check-report.xml', stopBuild: true
