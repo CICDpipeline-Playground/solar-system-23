@@ -65,7 +65,7 @@ pipeline{
                 catchError(buildResult: 'SUCCESS', message: 'Shhh! This can be fixed in the next release.', stageResult: 'UNSTABLE') {
 
                 sh 'npm run coverage'
-                publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: './', reportFiles: 'index.html', reportName: 'Code Coverage Report.html', reportTitles: '', useWrapperFileDirectly: true])
+                publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: './coverage/lcov-report/', reportFiles: 'index.html', reportName: 'Code Coverage Report.html', reportTitles: '', useWrapperFileDirectly: true])
                 }
             }
         }
