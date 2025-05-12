@@ -85,10 +85,14 @@ pipeline{
 
         stage("Building Docker Image"){
             steps {
-                sh '''
-                printenv
-                docker build -t gokulb574/solar-system:$GIT_COMMIT .
-                '''
+
+                script {
+                    docker.build("gokulb574/solar-system:${env.GIT_COMMIT}")
+                }
+                // sh '''
+                // printenv
+                // docker build -t gokulb574/solar-system:$GIT_COMMIT .
+                // '''  -> not working
             }
         }
     }
