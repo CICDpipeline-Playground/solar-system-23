@@ -3,6 +3,7 @@ pipeline{
 
     tools {
         nodejs 'Nodejs-gb-23.8.0'
+        
     }
 
     environment {
@@ -11,6 +12,7 @@ pipeline{
         MONGO_DB_CREDS = credentials('mongo-db-gb')
         MONGO_USERNAME = credentials('mdb-gb-uname')
         MONGO_PASSWORD = credentials('mdb-gb-pwd')
+        DOCKER_HOME = tool ('docker-latest-gb')
     }
 
 
@@ -84,7 +86,10 @@ pipeline{
 
         stage("Building Docker Image"){
             steps {
-                sh "docker build -t gokulb574/solar-system:$GIT_COMMIT"
+                sh '''
+                printenv
+                $DOCKER_HOME/bin/docker build -t gokulb574/solar-system:$GIT_COMMIT
+                '''
             }
         }
     }
