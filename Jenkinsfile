@@ -3,7 +3,6 @@ pipeline{
 
     tools {
         nodejs 'Nodejs-gb-23.8.0'
-        
     }
 
     environment {
