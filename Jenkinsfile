@@ -88,7 +88,7 @@ pipeline{
             steps {
                 sh '''
                 printenv
-                $DOCKER_HOME/bin/docker build -t gokulb574/solar-system:$GIT_COMMIT
+                $DOCKER_HOME/bin/docker build -t gokulb574/solar-system:$GIT_COMMIT .
                 '''
             }
         }
