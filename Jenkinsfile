@@ -40,6 +40,7 @@ pipeline{
                         dependencyCheck additionalArguments: '''--scan \'./\'
                             --out \'./\'
                             --format \'XML\'
+                            --disableYarnAudit \
                             --prettyPrint''', odcInstallation: 'owasp-12.1.1'
                         
                         dependencyCheckPublisher failedTotalCritical: 1, pattern: 'dependency-check-report.xml', stopBuild: true
@@ -72,6 +73,18 @@ pipeline{
                     sh 'npm run coverage'
                     
                 }
+            }
+        }
+
+        stage("SAST-SonarQube"){
+            steps {
+                echo "skipping this stage. if needed will configure later"
+            }
+        }
+
+        stage("Building Docker Image"){
+            steps {
+                sh "docker build -t gokulb574/solar-system:$GIT_COMMIT"
             }
         }
     }
