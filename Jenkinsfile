@@ -26,14 +26,16 @@ pipeline{
         }
         }
 
-        stage('Docker sanity') {
+        stage("Building Docker Image"){
             steps {
-                sh '''
-                    echo "PATH = $PATH"
-                    which docker || true
-                    docker version
-                    docker info
-                '''
+
+                // script {
+                //     docker.build("gokulb574/solar-system:${env.GIT_COMMIT}")
+                // }
+                // sh '''
+                // printenv
+                sh 'docker build -t gokulb574/solar-system:$GIT_COMMIT .'
+                // '''  -> not working
             }
         }
 
@@ -94,18 +96,7 @@ pipeline{
             }
         }
 
-        stage("Building Docker Image"){
-            steps {
 
-                script {
-                    docker.build("gokulb574/solar-system:${env.GIT_COMMIT}")
-                }
-                // sh '''
-                // printenv
-                // docker build -t gokulb574/solar-system:$GIT_COMMIT .
-                // '''  -> not working
-            }
-        }
     }
     post {
         always {
