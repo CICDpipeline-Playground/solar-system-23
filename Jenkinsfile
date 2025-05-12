@@ -12,7 +12,7 @@ pipeline{
         MONGO_DB_CREDS = credentials('mongo-db-gb')
         MONGO_USERNAME = credentials('mdb-gb-uname')
         MONGO_PASSWORD = credentials('mdb-gb-pwd')
-        DOCKER_HOME = tool ('docker-latest-gb')
+        //DOCKER_HOME = tool ('docker-latest-gb')
     }
 
 
@@ -88,7 +88,7 @@ pipeline{
             steps {
                 sh '''
                 printenv
-                $DOCKER_HOME/bin/docker build -t gokulb574/solar-system:$GIT_COMMIT .
+                docker build -t gokulb574/solar-system:$GIT_COMMIT .
                 '''
             }
         }
