@@ -26,6 +26,17 @@ pipeline{
         }
         }
 
+        stage('Docker sanity') {
+            steps {
+                sh '''
+                    echo "PATH = $PATH"
+                    which docker || true
+                    docker version
+                    docker info
+                '''
+            }
+        }
+
         stage ("Dependency Scanning"){
             parallel {
                 stage ("NPM DEP CHECKING") {
