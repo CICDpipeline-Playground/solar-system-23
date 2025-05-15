@@ -1,5 +1,7 @@
 pipeline{
-    agent any
+    agent {
+        label 'slave-eu-1'
+    }
 
     tools {
         nodejs 'Nodejs-gb-23.8.0'
@@ -26,18 +28,7 @@ pipeline{
         }
         }
 
-        stage("Building Docker Image"){
-            steps {
-
-                // script {
-                //     docker.build("gokulb574/solar-system:${env.GIT_COMMIT}")
-                // }
-                // sh '''
-                // printenv
-                sh 'docker build -t gokulb574/solar-system:$GIT_COMMIT .'
-                // '''  -> not working
-            }
-        }
+        
 
         stage ("Dependency Scanning"){
             parallel {
@@ -93,6 +84,18 @@ pipeline{
         stage("SAST-SonarQube"){
             steps {
                 echo "skipping this stage. if needed will configure later"
+            }
+        }
+        stage("Building Docker Image"){
+            steps {
+
+                // script {
+                //     docker.build("gokulb574/solar-system:${env.GIT_COMMIT}")
+                // }
+                // sh '''
+                // printenv
+                sh 'docker build -t gokulb574/solar-system:$GIT_COMMIT .'
+                // '''  -> not working
             }
         }
 
