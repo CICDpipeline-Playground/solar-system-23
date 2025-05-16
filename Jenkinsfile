@@ -129,7 +129,7 @@ pipeline{
 
         stage ("Pushing Docker Image") {
             steps{
-                withDockerRegistry(credentialsId: 'gokulb12') {
+                withDockerRegistry(credentialsId: 'gokulb12', url: 'https://index.docker.io/v1/') {
                     sh 'docker push gokulb12/solar-system:$GIT_COMMIT'
                 }
             }
