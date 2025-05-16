@@ -86,6 +86,7 @@ pipeline{
                 echo "skipping this stage. if needed will configure later"
             }
         }
+        
         stage("Building Docker Image"){
             steps {
 
@@ -97,9 +98,36 @@ pipeline{
                 sh 'docker build -t gokulb574/solar-system:$GIT_COMMIT .'
                 // '''  -> not working
             }
+        
         }
 
-
+        stage("Trivy Vulnerability Scanning"){
+            steps {
+                //for this step I have installed trivy cli using script  not using packg in jenkins slave
+                sh '''
+                    trivy image gokulb574/solar-system:$GIT_COMMIT \
+                        --severity MEDIUM,HIGH \
+                        --format json --output trivy-image-MED-HIGH-vul-report.json \
+                        --quiet \
+                        --exit-code 0
+                '''
+                sh '''
+                    trivy image gokulb574/solar-system:$GIT_COMMIT \
+                        --severity CRITICAL \
+                        --format json --output trivy-image-CRITICAL-vul-report.json \
+                        --quiet \
+                        --exit-code 1
+                '''
+            }
+            post {
+                always {
+                    archiveArtifacts artifacts: 'trivy-image-MED-HIGH-vul-report.json', fingerprint: true
+                    archiveArtifacts artifacts: 'trivy-image-CRITICAL-vul-report.json', fingerprint: true
+                }
+            }
+        }
+        
+        
     }
     post {
         always {
