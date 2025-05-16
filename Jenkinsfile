@@ -95,7 +95,7 @@ pipeline{
                 // }
                 // sh '''
                 // printenv
-                sh 'docker build -t gokulb574/solar-system:$GIT_COMMIT .'
+                sh 'docker build -t gokulb12/solar-system:$GIT_COMMIT .'
                 // '''  -> not working
             }
         
@@ -105,14 +105,14 @@ pipeline{
             steps {
                 //for this step I have installed trivy cli using script  not using packg in jenkins slave
                 sh '''
-                    trivy image gokulb574/solar-system:$GIT_COMMIT \
+                    trivy image gokulb12/solar-system:$GIT_COMMIT \
                         --severity MEDIUM,HIGH \
                         --format json --output trivy-image-MED-HIGH-vul-report.json \
                         --quiet \
                         --exit-code 0
                 '''
                 sh '''
-                    trivy image gokulb574/solar-system:$GIT_COMMIT \
+                    trivy image gokulb12/solar-system:$GIT_COMMIT \
                         --severity CRITICAL \
                         --format json --output trivy-image-CRITICAL-vul-report.json \
                         --quiet \
@@ -123,6 +123,14 @@ pipeline{
                 always {
                     archiveArtifacts artifacts: 'trivy-image-MED-HIGH-vul-report.json', fingerprint: true
                     archiveArtifacts artifacts: 'trivy-image-CRITICAL-vul-report.json', fingerprint: true
+                }
+            }
+        }
+
+        stage ("Pushing Docker Image") {
+            steps{
+                withDockerRegistry(credentialsId: 'gokulb12') {
+                    sh 'docker push gokulb12/solar-system:$GIT_COMMIT'
                 }
             }
         }
